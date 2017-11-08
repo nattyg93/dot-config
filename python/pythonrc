@@ -1,0 +1,19 @@
+import os
+import atexit
+import readline
+
+try:
+    atexit.unregister(readline.write_history_file)
+except AttributeError:
+    pass
+
+readline_history_file = os.path.join(
+        os.environ['XDG_DATA_HOME'],
+        'python/pythonhist')
+
+try:
+    readline.read_history_file(readline_history_file)
+except IOError:
+    open(readline_history_file, 'a').close()
+
+atexit.register(readline.write_history_file, readline_history_file)
