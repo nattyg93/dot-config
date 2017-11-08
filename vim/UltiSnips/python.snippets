@@ -1,0 +1,40 @@
+snippet _f "future imports for python2"
+from __future__ import absolute_import, print_function, unicode_literals
+
+endsnippet
+
+snippet dmodel "Django Model skeleton"
+class $1(models.Model):
+    """ $2 """
+    $3
+
+    def __str__(self):
+        $4
+endsnippet
+
+snippet pdb "Method with trace"
+import $1pdb
+$1pdb.set_trace()
+endsnippet
+
+snippet mpdb "Method with trace"
+def $1(self, *args, **kwargs):
+    import $2pdb
+    $2pdb.set_trace()
+    val = super().$1(*args, **kwargs)
+    return val
+endsnippet
+
+snippet initpdb "Method with trace"
+def __init__(self, *args, **kwargs):
+    import $2pdb
+    $2pdb.set_trace()
+    val = super().__init__(*args, **kwargs)
+    return val
+endsnippet
+
+snippet override "Python override class method"
+def $1(self$2):
+    val = super().$1($2)$3
+    return val
+endsnippet

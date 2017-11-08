@@ -1,0 +1,175 @@
+" Force XDG basedir spec compliance
+	let g:nvim_data_dir = expand('$XDG_DATA_HOME/nvim')
+	let g:python2_venv = g:nvim_data_dir . '/venv2'
+	let g:python3_venv = g:nvim_data_dir . '/venv3'
+
+" Interpreters
+	let g:python2_bin = g:python2_venv . "/bin"
+	let g:python3_bin = g:python3_venv . "/bin"
+	let g:python_host_prog = g:python2_bin . "/python"
+	let g:python3_host_prog = g:python3_bin . "/python"
+
+
+" Search
+    set ignorecase
+    set smartcase
+
+" Folding
+    set foldmethod=indent
+    set foldlevel=20
+
+" General
+    set undofile                          " Enable persistent undo
+    set path+=$PWD/**                     " Make current working directory searchable
+
+" Mapping
+    " Change the leader key
+        let mapleader=","
+    " make Y like D and C
+      nnoremap Y y$
+    " clear command line
+      nnoremap Q :<C-u>noh<CR>:AirlineRefresh<CR>:lcl<CR>:<C-c>
+    " split screen movement
+      nnoremap <C-j> <C-w>j
+      nnoremap <C-k> <C-w>k
+      nnoremap <C-l> <C-w>l
+      nnoremap <C-h> <C-w>h
+    " tabs
+      nnoremap tj :<C-u>tabnext<CR>
+      nnoremap tk :<C-u>tabprevious<CR>
+      nnoremap th :<C-u>tabfirst<CR>
+      nnoremap tl :<C-u>tablast<CR>
+      nnoremap tn :<C-u>tabnew<CR>
+      nnoremap te :<C-u>tabedit<SPACE>
+      nnoremap tc :<C-u>tabclose<CR>
+      nnoremap tt :<C-u>tabnew<CR>:<C-u>terminal<CR>
+    " Tagbar
+      nnoremap tb :<C-u>TagbarToggle<CR>
+    " Neovim remaps
+      if has('nvim')
+          tnoremap <C-\><C-]> <C-\><C-n>
+      end
+    " Display information about the highlighting group under the cursor
+            map <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
+        \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
+        \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
+    " Insert current file's directory in cmdline
+        cabbr <expr> %% expand('%:p:h')
+    " Fix tab behaviour in vim's popup
+        inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
+        inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
+    " Search for selected text, forwards or backwards.
+        vnoremap <silent> * :<C-U>
+          \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+          \gvy/<C-R><C-R>=substitute(
+          \escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+          \gV:call setreg('"', old_reg, old_regtype)<CR>
+        vnoremap <silent> # :<C-U>
+          \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+          \gvy?<C-R><C-R>=substitute(
+          \escape(@", '?\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+          \gV:call setreg('"', old_reg, old_regtype)<CR>
+
+
+set timeoutlen=250
+" Indentation
+    set expandtab                           " Expand tabs by default
+    set shiftround                          " Indents rounded to shiftwidths
+    set copyindent                          " Maintain current indent on next line
+    set preserveindent                      " Try not to mess with indentation
+    set shiftwidth=2                        " Indentation at 4 width
+    set tabstop=2                           " Tabs at 4 width
+    set softtabstop=2                       " Soft tabs at 4 width
+    set fo+=t                               " Enables autowrap
+    set nowrap                              " Enables line wrapping for long lines
+    set breakindent                         " For soft wraps, indent newlines
+    set nostartofline                       " Stop gg/G etc. from moving to col0
+    filetype plugin indent on               " Enable filetype-specific settings
+    set list                                " Show whitespace
+    set listchars=tab:│\ ,trail:•           " Show these whitespaces by default
+
+" ColorColumn
+    set colorcolumn=80
+    highlight ColorColumn ctermbg=54 ctermfg=1
+
+" UI
+    set number
+
+" Buffers
+    " set hidden
+
+" Plugins
+    call plug#begin('~/.local/share/vim/plug')
+
+    Plug 'Shougo/unite.vim'
+    Plug 'davidhalter/jedi-vim'
+    " Plug 'Shougo/unite.vim'                     " Searching
+    Plug 'Shougo/denite.nvim'                     " Searching
+    Plug 'tpope/vim-surround'                     " Change text surroundings
+    Plug 'mbbill/undotree'                        " Revision History
+    Plug 'tpope/vim-fugitive'                     " Git integration
+    Plug 'majutsushi/tagbar'                      " Tag outliner
+    Plug 'bling/vim-airline'                      " Improved statusbar
+    Plug 'SirVer/ultisnips'                       " Snippet engine
+    Plug 'rhysd/committia.vim'                    " Nicer git commit support
+    Plug 'junegunn/goyo.vim'                      " Nicer prose editing
+    Plug 'maksimr/vim-jsbeautify'                 " Pretty print minified JS
+    if has('nvim')
+        Plug 'w0rp/ale'                           " Asynchronous Lint Engine
+        Plug 'Shougo/deoplete.nvim'               " Improved completion UI
+        " Plug 'benekastah/neomake'                 " Linting
+    end
+
+    call plug#end()
+
+" Plugin settings
+    " Neomake
+        " let g:neomake_python_enabled_makers = ['pylint', 'flake8', 'python', 'mypy']
+        " let g:neomake_open_list = 2
+        " highlight NeomakeWarningDefault cterm=underline ctermfg=0 ctermbg=1 gui=undercurl guisp=Blue " Fix highlighting for warnings
+        " autocmd! BufWritePost * Neomake
+
+    " A.L.E
+        let g:ale_lint_on_insert_leave = 1           " Lint when leaving insert mode
+        let g:ale_lint_on_text_changed = 'normal'    " Lint when text changes in normal mode
+        let g:ale_open_list = 'on_save'
+        let g:ale_virtualenv_dir_names = get(g:, 'ale_virtualenv_dir_names', []) + ['venv']
+        let g:ale_echo_msg_format = '%linter%: %s'
+        highlight SpellBad cterm=underline ctermfg=0 ctermbg=1 gui=undercurl guisp=Blue  " Fix highlighting for warnings
+
+        " mypy
+        let g:ale_python_mypy_options = '--ignore-missing-imports --follow-imports=skip --cache-dir=/dev/null'
+
+    " Jedi
+        " let g:jedi#force_py_version = '3'
+
+    " Unite
+        " call unite#filters#matcher_default#use(['matcher_fuzzy'])
+        " nnoremap <leader>b :<C-u>Unite -no-split buffer<CR>
+        " nnoremap <leader>a :<C-u>Unite -start-insert grep:.<CR>
+
+    " Fugitive
+        nnoremap gb :<C-u>Gblame<CR>
+
+    " Denite
+        nnoremap <leader>a :<C-u>Denite -direction=top grep:.<CR>
+        nnoremap <leader>b :<C-u>Denite -direction=top buffer<CR>
+        highlight WildMenu ctermfg=2 ctermbg=11 guifg=Black guibg=Yellow
+
+    " UndoTree
+        map <leader>u :UndotreeToggle<CR>
+        let g:undotree_SetFocusWhenToggle = 1
+
+    " Airline
+        let g:airline#extensions#ale#enabled = 1
+        let g:airline#extensions#tagbar#flags = 'f'
+        let g:airline#extensions#virtualenv#enabled = 0     " Don't display the name of the virtual env
+        let g:airline_section_x = '%{airline#extensions#tagbar#currenttag()}'
+        let g:airline_section_y = ''
+        let g:airline_section_z = '%#__accent_bold#%{g:airline_symbols.linenr}
+                                \ %4l%#__restore__#%#__accent_bold#/
+                                \%L%#__restore__# :%3v'
+    " UltiSnips
+        let g:UltiSnipsExpandTrigger="<leader>z"
+        let g:UltiSnipsJumpForwardTrigger="<leader>z"
+        let g:UltiSnipsJumpBackwardTrigger="<leader>Z"
