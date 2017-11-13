@@ -127,3 +127,7 @@ source ~/.config/sh/aliases.sh
 # Pyenv
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
+
+
+# Python
+export PYTHONDONTWRITEBYTECODE=1
