@@ -25,12 +25,16 @@ def $1(self, *args, **kwargs):
     return val
 endsnippet
 
-snippet initpdb "Method with trace"
+snippet init "init"
+def __init__(self, *args, **kwargs):
+    super().__init__(*args, **kwargs)
+endsnippet
+
+snippet initpdb "Init with trace"
 def __init__(self, *args, **kwargs):
     import $2pdb
     $2pdb.set_trace()
-    val = super().__init__(*args, **kwargs)
-    return val
+    super().__init__(*args, **kwargs)
 endsnippet
 
 snippet override "Python override class method"
