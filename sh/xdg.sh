@@ -34,6 +34,7 @@
 	export PIP_LOG_FILE="$XDG_DATA_HOME/pip/log"
 	export PSQLRC="$XDG_CONFIG_HOME/psql/psqlrc"
 	export PSQL_HISTORY="$XDG_DATA_HOME/psql/history"
+	export PYENV_ROOT="$XDG_DATA_HOME/pyenv"
 	export PYLINTHOME="$XDG_DATA_HOME/pylint"
 	export PYLINTRC="$XDG_CONFIG_HOME/pylint/pylintrc"
 	export PYTHONSTARTUP="$XDG_CONFIG_HOME/python/pythonrc"
