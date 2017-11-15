@@ -24,8 +24,8 @@ alias dpi='docker-compose exec db psql -Udjango django < dj_"$COMPOSE_PROJECT_NA
 alias dpo='docker-compose exec db pg_dump -Udjango django > dj_"$COMPOSE_PROJECT_NAME".psql'
 
 # Docker aliases for new style projects
-alias dcd='docker-compose run --rm backend /var/www/deployment/deploy.py'
-alias dmn='docker-compose run --rm backend /var/www/deployment/deploy.py run python -mdjango'
+alias dcd='docker-compose run --rm runserver /var/www/deployment/deploy.py'
+alias dmn='docker-compose run --rm runserver /var/www/deployment/deploy.py run python -mdjango'
 
 
 _get_editor() {
