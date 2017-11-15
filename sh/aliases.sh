@@ -25,7 +25,7 @@ alias dpo='docker-compose exec db pg_dump -Udjango django > dj_"$COMPOSE_PROJECT
 
 # Docker aliases for new style projects
 alias dcd='docker-compose run --rm runserver /var/www/deployment/deploy.py'
-alias dmn='docker-compose run --rm runserver /var/www/deployment/deploy.py run python -mdjango'
+alias dmn='docker-compose run --rm runserver /var/www/deployment/deploy.py run python3 -mdjango'
 
 
 _get_editor() {
