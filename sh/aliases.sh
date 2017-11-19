@@ -13,6 +13,7 @@ fi
 
 alias l="ls -lAh"
 alias vim=nvim
+alias :e="echo -n ':e ' | nvim"
 # Docker
 alias dc='docker-compose'
 alias dcl="docker-compose logs -f --tail=50"
