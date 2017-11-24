@@ -29,17 +29,9 @@ class VenvManager:
         return tmp
 
     def mkvenv(self):
-        if not path.exists(self.project_dir):
-            mkdir(self.project_dir)
-        pip = path.join(self.venv_dir, 'bin', 'pip')
-        if not path.exists(pip):
-            import venv
-            venv.create(self.venv_dir, with_pip=True)  # pylint: disable=no-member
-            run([pip, 'install', '--upgrade'] + self.require)
-            with open(self.activate, 'a') as fyl:
-                fyl.write('set -o allexport && . "%s" && . "%s" && set +o allexport' % (
-                    self.dep_env_file, self.env_file))
         if not path.exists(self.env_file):
+            if not path.exists(self.project_dir):
+                mkdir(self.project_dir)
             with open(self.env_file, 'w') as fyl:
                 fyl.writelines([x + '\n' for x in [
                     'VIRTUAL_ENV_NAME=%s' % self.name,
@@ -48,21 +40,39 @@ class VenvManager:
                     'PROJECT_VENV="%s"' % self.venv_dir,
                     # 'PYTHONPATH="`pwd`:$XDG_DATA_HOME/vim/plug/ViMango/plugin:$PYTHONPATH"',
                 ]])
+        pip = path.join(self.venv_dir, 'bin', 'pip')
+        if not path.exists(pip):
+            import venv
+            venv.create(self.venv_dir, with_pip=True)  # pylint: disable=no-member
+            run([pip, 'install', '--upgrade'] + self.require)
+            with open(self.activate, 'a') as fyl:
+                fyl.write('set -o allexport && . "%s" && . "%s" && set +o allexport' % (
+                    self.dep_env_file, self.env_file))
         self.workon()
 
     def workon(self):
+        mkvenv = False
         if not path.exists(self.project_dir):
-            sys.exit('No project exists at {}.'.format(self.project_dir))
-        if not path.exists(self.activate):
+            msg = 'No project exists at {}. Make one?'.format(
+                self.project_dir)
+            mkvenv = get_boolean_input(msg)
+            if not mkvenv:
+                sys.exit('No project exists at {}.'.format(self.project_dir))
+        elif not path.exists(self.activate):
             venv_path = path.join(self.project_dir, self.venv_dir)
-            msg = 'No venv exists in {}. Make one? [y/N]: '.format(venv_path)
-            mkvenv = input(msg)
-            if mkvenv.lower() == 'y':
-                return self.mkvenv()
-            sys.exit('No venv to activate.'.format(self.name))
+            msg = 'No venv exists in {}. Make one?: '.format(venv_path)
+            mkvenv = get_boolean_input(msg)
+            if not mkvenv:
+                sys.exit('No venv to activate.'.format(self.name))
+        if mkvenv:
+            return self.mkvenv()
         chdir(self.get_src_dir())
         shell = environ['SHELL']
         run([shell, '-c', 'source {}; {} -i'.format(self.activate, shell)])
+
+
+def get_boolean_input(msg):
+    return input(msg + ' [y/N]: ').strip().lower() == 'y'
 
 
 if __name__ == '__main__':
