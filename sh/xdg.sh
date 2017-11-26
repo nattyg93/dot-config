@@ -14,7 +14,6 @@
 	export GEM_HOME="$HOME/.local/lib/gems"
 	export GEM_PATH="$HOME/.local/bin"
 	export GEM_SPEC_CACHE="$XDG_CACHE_HOME/gem"
-	export GIT_SSH_COMMAND="ssh -F $XDG_CONFIG_HOME/ssh/config "$@" 2>/dev/null"
 	export GNUPGHOME="$XDG_CONFIG_HOME/gnupg"
 	export GRADLE_USER_HOME="$XDG_CACHE_HOME/gradle"
 	export GTK2_RC_FILES="$XDG_CONFIG_HOME/gtk-2.0/gtkrc"
@@ -55,10 +54,7 @@
 	export BROWSER="firefox -profile $XDG_CONFIG_HOME/firefox"
 	alias mutt="mutt -F $XDG_CONFIG_HOME/mutt/muttrc"
 	alias ncmpcpp="ncmpcpp -c $XDG_CONFIG_HOME/ncmpcpp/config"
-	alias scp="scp -F $XDG_CONFIG_HOME/ssh/config"
-	alias ssh="ssh -F $XDG_CONFIG_HOME/ssh/config"
 	alias startx="startx $XDG_CONFIG_HOME/X11/xinitrc"
-	alias rsyncs="rsync -e \"ssh -F $XDG_CONFIG_HOME/ssh/config\""
 	alias rtorrent="rtorrent -n -o import=$XDG_CONFIG_HOME/rtorrent/conf"
 	alias tmux="tmux -f $XDG_CONFIG_HOME/tmux/tmux.conf"
 
