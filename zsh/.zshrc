@@ -50,8 +50,11 @@ export HISTFILE="$ZDOTDIR/zsh_history"
 export HISTCONTROL=ignoreboth   # Ignore duplicate/blank lines in history
 export HISTSIZE=100000          # 100K command in history file
 export SAVEHIST=100000          # 100K in shell
-setopt inc_append_history       # Save every command before it is executed
-setopt share_history            # Share history between shells
+setopt INC_APPEND_HISTORY       # Save every command before it is executed
+setopt SHARE_HISTORY            # Share history between shells
+setopt HIST_EXPIRE_DUPS_FIRST   # Expire duplicate entries first when trimming history.
+setopt HIST_IGNORE_DUPS         # Do not record an entry that was just recorded again.
+setopt HIST_IGNORE_SPACE        # Do not record entries that begin with a space
 
 
 
