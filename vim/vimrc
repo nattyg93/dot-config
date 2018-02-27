@@ -27,8 +27,6 @@
         let mapleader=","
     " make Y like D and C
       nnoremap Y y$
-    " J remove the space
-      nnoremap J Jx
     " clear command line
       nnoremap Q :<C-u>noh<CR>:AirlineRefresh<CR>:lcl<CR>:<C-c>
     " split screen movement
