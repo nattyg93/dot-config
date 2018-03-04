@@ -23,6 +23,7 @@ alias dm='docker-compose exec web /var/www/venv/bin/python manage.py'
 alias dp='docker-compose exec db psql -Udjango django'
 alias dpi='docker-compose exec db psql -Udjango django < dj_"$COMPOSE_PROJECT_NAME".psql'
 alias dpo='docker-compose exec db pg_dump -Udjango django > dj_"$COMPOSE_PROJECT_NAME".psql'
+alias dfc='docker run --rm --privileged alpine hwclock -s'
 
 # Docker aliases for new style projects
 alias dcd='docker-compose run --rm runserver /var/www/deployment/deploy.py'
