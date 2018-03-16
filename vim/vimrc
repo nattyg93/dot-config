@@ -69,6 +69,10 @@
           \gvy?<C-R><C-R>=substitute(
           \escape(@", '?\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
           \gV:call setreg('"', old_reg, old_regtype)<CR>
+    " Fix formatting of Python files
+        nnoremap <leader>f :ALEFix<bar>
+          \call input('Press enter to sort imports.')<bar>
+          \:Isort<CR>
 
 
 set timeoutlen=250
@@ -114,6 +118,7 @@ set timeoutlen=250
     Plug 'rhysd/committia.vim'                    " Nicer git commit support
     Plug 'junegunn/goyo.vim'                      " Nicer prose editing
     Plug 'maksimr/vim-jsbeautify'                 " Pretty print minified JS
+    Plug 'fisadev/vim-isort'                      " Sort Python imports
     if has('nvim')
         Plug 'w0rp/ale'                           " Asynchronous Lint Engine
         Plug 'Shougo/deoplete.nvim'               " Improved completion UI
@@ -135,6 +140,7 @@ set timeoutlen=250
         let g:ale_open_list = 'on_save'
         let g:ale_virtualenv_dir_names = get(g:, 'ale_virtualenv_dir_names', []) + ['venv']
         let g:ale_echo_msg_format = '%linter%: %s'
+        let g:ale_fixers = {'python': ['yapf']}
         highlight SpellBad cterm=underline ctermfg=0 ctermbg=1 gui=undercurl guisp=Blue  " Fix highlighting for warnings
 
         " mypy
