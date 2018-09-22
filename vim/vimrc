@@ -125,6 +125,7 @@ set timeoutlen=250
         " Plug 'benekastah/neomake'                 " Linting
     end
 
+    Plug 'dart-lang/dart-vim-plugin'              " Dart highlighting
     call plug#end()
 
 " Plugin settings
@@ -179,3 +180,18 @@ set timeoutlen=250
         let g:UltiSnipsExpandTrigger="<leader>z"
         let g:UltiSnipsJumpForwardTrigger="<leader>z"
         let g:UltiSnipsJumpBackwardTrigger="<leader>Z"
+
+
+    " Flutter
+    function! FlutterTriggerHotReload() abort
+        silent execute '!kill -SIGUSR1 "$(cat /tmp/flutter.pid)"'
+    endfunction
+
+    function! FlutterTriggerHotRestart() abort
+        silent execute '!kill -SIGUSR2 "$(cat /tmp/flutter.pid)"'
+    endfunction
+    nnoremap <leader>fr :call FlutterTriggerHotRestart()<CR>
+    autocmd BufWritePost *.dart call FlutterTriggerHotReload()
+
+    " Dart
+    let dart_format_on_save = 1
