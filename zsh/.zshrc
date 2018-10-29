@@ -26,11 +26,67 @@ done
 
 
 
-zstyle ':completion:*' completer _expand _complete _ignored _approximate
-autoload -Uz compinit bashcompinit
+
+# zstyle ':completion:*' completer _expand _complete _ignored _approximate
+# autoload -Uz compinit bashcompinit
+# compinit
+# bashcompinit
+# End of lines added by compinstall
+
+
+
+
+
+
+zstyle ':completion:*' completer _expand _complete _ignored _match _correct _approximate _prefix
+zstyle ':completion:*' completions 1
+zstyle ':completion:*' expand prefix suffix
+zstyle ':completion:*' file-sort name
+zstyle ':completion:*' glob 1
+zstyle ':completion:*' ignore-parents parent pwd .. directory
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*' list-prompt %SAt %p: Hit TAB for more, or the character to insert%s
+zstyle ':completion:*' list-suffixes true
+zstyle ':completion:*' match-original both
+zstyle ':completion:*' matcher-list '' '+m:{[:lower:]}={[:upper:]}' '+m:{[:lower:][:upper:]}={[:upper:][:lower:]}' '+r:|[._-]=** r:|=** l:|=*'
+zstyle ':completion:*' max-errors 1
+zstyle ':completion:*' menu select=1
+zstyle ':completion:*' preserve-prefix '//[^/]##/'
+zstyle ':completion:*' prompt 'correcting from %e errors'
+zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s
+zstyle ':completion:*' substitute 1
+zstyle ':completion:*' use-compctl false
+zstyle ':completion:*' users
+
+# From Benjamin
+zstyle -e ':completion:*:hosts' hosts 'reply=(
+ ${=${=${=${${(f)"$(cat {/etc/ssh/ssh_,~/.ssh/}known_hosts(|2)(N) 2> /dev/null)"}%%[#| ]*}//\]:[0-9]*/ }//,/ }//\[/ }
+ ${=${(f)"$(cat /etc/hosts(|)(N) <<(ypcat hosts 2> /dev/null))"}%%(\#${_etc_host_ignores:+|${(j:|:)~_etc_host_ignores}})*}
+ ${=${${${${(@M)${(f)"$(cat ~/.ssh/config 2> /dev/null)"}:#Host *}#Host }:#*\**}:#*\?*}}
+ ${=${${${${(@M)${(f)"$(cat ~/.local/share/ssh/config.d/clients 2> /dev/null)"}:#Host *}#Host }:#*\**}:#*\?*}}
+)'
+zstyle ':completion:*:(ssh|scp|rsync):*' tag-order 'hosts:-host:host hosts:-domain:domain hosts:-ipaddr:ip\ address *'
+zstyle ':completion:*:(scp|rsync):*' group-order users files all-files hosts-domain hosts-host hosts-ipaddr
+zstyle ':completion:*:ssh:*' group-order users hosts-domain hosts-host users hosts-ipaddr
+zstyle ':completion:*:(ssh|scp|rsync):*:hosts-host' ignored-patterns '*(.|:)*' loopback ip6-loopback localhost ip6-localhost broadcasthost
+zstyle ':completion:*:(ssh|scp|rsync):*:hosts-domain' ignored-patterns '<->.<->.<->.<->' '^[-[:alnum:]]##(.[-[:alnum:]]##)##' '*@*'
+zstyle ':completion:*:(ssh|scp|rsync):*:hosts-ipaddr' ignored-patterns '^(<->.<->.<->.<->|(|::)([[:xdigit:].]##:(#c,2))##(|%*))' '127.0.0.<->' '255.255.255.255' '::1' 'fe80::*'
+
+zstyle :compinstall filename "$XDG_CONFIG_HOME/zsh/.zshrc"
+
+[[ -d /usr/local/share/zsh-completions ]] && fpath=(/usr/local/share/zsh-completions $fpath)
+
+autoload -Uz compinit bashcompinit promptinit
 compinit
 bashcompinit
-# End of lines added by compinstall
+
+
+
+
+
+
+
+
 
 
 
@@ -59,7 +115,7 @@ setopt HIST_IGNORE_SPACE        # Do not record entries that begin with a space
 
 
 # PS1
-source "$HOME/programs/zsh-git-prompt/zshrc.sh"    # This program comes from: https://github.com/olivierverdier/zsh-git-prompt
+source "$HOME/programs/zsh-git-prompt/zshrc.sh"    # This program comes from: https://github.com/starcraftman/zsh-git-prompt
 ZSH_THEME_GIT_PROMPT_BRANCH="%{$fg_bold[green]%}"           # Make branch name green
 # Make PS1 look something like (ebeacon) [21:09:17 development (master|✔)]% ls -lA
 function zle-line-init zle-keymap-select {
@@ -134,3 +190,22 @@ eval "$(pyenv virtualenv-init -)"
 
 # Python
 export PYTHONDONTWRITEBYTECODE=1
+
+# Pipenv
+eval "$(pipenv --completion)"
+
+# Direnv
+eval "$(direnv hook zsh)"
+
+
+# Android dev
+export JAVA_HOME="$(/usr/libexec/java_home)"
+export ANDROID_HOME="/Users/nathanael/Library/Android/sdk"
+export ANDROID_SDK_ROOT="/Users/nathanael/Library/Android/sdk"
+
+
+# Add Ionata AWS commands
+source "$DEV_DIR/scripts-aws/manage.sh"
+
+# Add Flutter to path
+export PATH="$PATH":"$HOME/.pub-cache/bin"
